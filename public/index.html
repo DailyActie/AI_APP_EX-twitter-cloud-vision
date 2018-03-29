@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+	<link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="app">
+		<v-app dark>
+			<v-toolbar app fixed>
+				<v-toolbar-title>Real-Time Tweets with Face detection</v-toolbar-title>
+			</v-toolbar>
+			<v-content>
+				<v-container fluid fill-height>
+					<v-layout justify-center>
+						<v-flex xs12 sm8 md4>
+							<div v-for="t in tweets" :key="t.id" class="card-container">
+								<!-- <v-card>
+									<img :src="t.entities.media[0].media_url" alt="" class="img-responsive">
+									<v-card-title primary-title>
+										<div>
+											<h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+											<div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+										</div>
+									</v-card-title>
+									<v-card-actions>
+										<v-spacer></v-spacer>
+										<v-btn icon>
+											<v-icon color="blue lighten-1">far fa-thumbs-up</v-icon>
+										</v-btn>
+									</v-card-actions>
+								</v-card> -->
+								<v-card>
+									<v-container fluid grid-list-lg>
+										<v-layout row>
+											<v-flex xs7>
+												<div>
+													<div class="subheading">{{t.user.name}}</div>
+													<div>{{t.text}}</div>
+													<br>
+													<div>Face count: 
+														<span v-if="t.visionResult.scanning" class="content-placeholder" style="width: 50px;"></span>
+														<span v-else>{{t.visionResult.faces_detected}}</span>
+													</div>
+													<br>
+													<div>
+														<p>Faces:</p>
+														<div v-if="t.visionResult.scanning" class="content-placeholder" style="width: 170px; height: 110px;"></div>
+														<div v-else v-for="(face, i) in t.visionResult.faceAnnotations" :key="i">
+															<div>Face {{i + 1}}:</div>
+															<div class="mb-2">
+																<div>Joy: {{face.joyLikelihood}}</div>
+																<div>Anger: {{face.angerLikelihood}}</div>
+																<div>Sorrow: {{face.sorrowLikelihood}}</div>
+																<div>Surprise: {{face.surpriseLikelihood}}</div>
+																<div>Headwear: {{face.headwearLikelihood}}</div>
+															</div>
+															<v-divider v-show="(i+1) !== t.visionResult.faceAnnotations.length"></v-divider>
+														</div>
+													</div>
+												</div>
+											</v-flex>
+											<v-flex xs5>
+												<img v-lazy="t.first_image.media_url" :height="`${t.first_image.sizes.thumb.h}px`" :width="`${t.first_image.sizes.thumb.w}px`"></img>
+											</v-flex>
+										</v-layout>
+									</v-container>
+									<v-card-actions>
+										<v-badge color="blue lighten-1" :value="t.favorite_count > 0 ? true : false">
+											<span slot="badge">{{t.favorite_count}}</span>
+											<v-icon
+											>
+											far fa-thumbs-up
+										</v-icon>
+									</v-badge>
+								</v-card-actions>
+							</v-card>
+						</div>
+					</v-flex>
+				</v-layout>
+			</v-container>
+		</v-content>
+	</v-app>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+<script src="https://unpkg.com/vue-lazyload/vue-lazyload.js"></script>
+<script src="https://unpkg.com/vue-toasted"></script>
+<script src="/lib/socket.io-client/dist/socket.io.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
