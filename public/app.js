@@ -2,7 +2,7 @@ const socket = io.connect();
 
 async function fetchVisionResult (imageUrl) {
 	try {
-		const apiKey = 'AIzaSyB6OVr1e_foHXNtwtgLvttKyaTKfgMYADs'
+		const apiKey = ''
 		const response = await fetch('https://vision.googleapis.com/v1/images:annotate?key=' + apiKey, {
 			method: 'post',
 			body: JSON.stringify({
